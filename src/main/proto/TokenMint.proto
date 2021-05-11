@@ -33,7 +33,16 @@ The operation increases the Total Supply of the Token. The maximum total supply 
 The amount provided must be in the lowest denomination possible. Example:
 Token A has 2 decimals. In order to mint 100 tokens, one must provide amount of 10000. In order to mint 100.55 tokens, one must provide amount of 10055.
  */
+
+message AmountOrMemo {
+	oneof amountOrMemo{
+    		uint64 amount = 1; // Applicable to tokens of type FUNGIBLE. The amount to mint to the Treasury Account. Amount must be a positive non-zero number represented in the lowest denomination of the token. The new supply must be lower than 2^63
+        string memo = 2; // Applicable to tokens of type NON_FUNGIBLE. The metadata for the given NFT instance that is being created
+    	}
+}
+
 message TokenMintTransactionBody {
     TokenID token = 1; // The token for which to mint tokens. If token does not exist, transaction results in INVALID_TOKEN_ID
-    uint64 amount = 2; // The amount to mint to the Treasury Account. Amount must be a positive non-zero number represented in the lowest denomination of the token. The new supply must be lower than 2^63.
+    uint64 amount = 2 [deprecated=true]; // The amount to mint to the Treasury Account. Amount must be a positive non-zero number represented in the lowest denomination of the token. The new supply must be lower than 2^63.
+    AmountOrMemo amountOrMemo = 3;
 }

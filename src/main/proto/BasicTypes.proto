@@ -74,6 +74,30 @@ message TransactionID {
     bool scheduled = 3; // Whether the Transaction is of type Scheduled or no
 }
 
+message AmountOrSerialNumbers {
+    oneof amountOrSerialNumbers {
+        uint64 amount = 1; // Applicable to tokens of type FUNGIBLE. Amount of fungible tokens to burn/wipe
+        SerialNumbers serialNumbers = 2; // Applicable to tokens of type NON_FUNGIBLE. The list of serial numbers to be burned/wiped.
+    }
+}
+
+//Fungible or Non-Fungible Token Base. Cannot be updated using admin key
+enum TokenType {
+    FUNGIBLE = 0;
+    NON_FUNGIBLE = 1;
+}
+
+message SerialNumbers {
+    repeated uint64 serialNumbers = 1;
+}
+
+
+message NftTransfer {
+    AccountID fromAccount = 1;  // Sending account
+    AccountID toAccount = 2;  // Receiving account
+    uint64 serialNo = 3;  // Serial number that is being transferred
+}
+
 /* An account, and the amount that it sends or receives during a cryptocurrency or token transfer. */
 message AccountAmount {
     AccountID accountID = 1; // The Account ID that sends/receives cryptocurrency or tokens
@@ -88,7 +112,8 @@ message TransferList {
 /* A list of token IDs and amounts representing the transferred out (negative) or into (positive) amounts, represented in the lowest denomination of the token */
 message TokenTransferList {
     TokenID token = 1; // The ID of the token
-    repeated AccountAmount transfers = 2; // Multiple list of AccountAmounts, each of which has an account and amount
+    repeated AccountAmount transfers = 2; // Applicable to tokens of type FUNGIBLE. Multiple list of AccountAmounts, each of which has an account and amount
+    repeated NftTransfer nftTransfers = 3; // Applicable to tokens of type NON_FUNGIBLE
 }
 
 /* Unique identifier for a topic (used by the consensus service) */
@@ -397,10 +422,10 @@ message ServicesConfigurationList {
 message TokenRelationship {
     TokenID tokenId = 1; // The ID of the token
     string symbol = 2; // The Symbol of the token
-    uint64 balance = 3; // The balance that the Account holds in the smallest denomination
+    uint64 balance = 3; // For token of type FUNGIBLE - the balance that the Account holds in the smallest denomination. For token of type NON_FUNGIBLE - the number of NFTs held by the account
     TokenKycStatus kycStatus = 4; // The KYC status of the account (KycNotApplicable, Granted or Revoked). If the token does not have KYC key, KycNotApplicable is returned
     TokenFreezeStatus freezeStatus = 5; // The Freeze status of the account (FreezeNotApplicable, Frozen or Unfrozen). If the token does not have Freeze key, FreezeNotApplicable is returned
-    uint32 decimals = 6; // Tokens divide into <tt>10<sup>decimals</sup></tt> pieces
+    uint32 decimals = 6; // The number of decimal places a token is divisible by. Always 0 for tokens of type NON_FUNGIBLE
 }
 
 /* A number of <i>transferable units</i> of a certain token.
