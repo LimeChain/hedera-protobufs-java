@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package proto;
+
+/*-
+ * ‌
+ * Hedera Network Services Protobuf
+ * ​
+ * Copyright (C) 2018 - 2021 Hedera Hashgraph, LLC
+ * ​
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ‍
+ */
+
+/* Applicable only to tokens of type NON_FUNGIBLE. Gets info on NFTs N through M on the list of NFTs associated with a given NON_FUNGIBLE Token */
+message GetTokenNftInfoQuery {
+    QueryHeader header = 1; // Standard info sent from client to node, including the signed payment, and what kind of response is requested (cost, state proof, both, or neither).
+    TokenID tokenId = 2; // The ID of the token for which information is requested
+    uint64 start = 3; // Specifies the start (including) of the range of NFTs to query for. Value must be in the range (0; totalSupply]
+    uint64 end = 4; // Specifies the end (including) of the range of NFTs to query for. Value must be in the range [start; totalSupply]
+}
+
+message GetTokenNftInfoResponse {
+    ResponseHeader header = 1; // Standard response from node to client, including the requested fields: cost, or state proof, or both, or neither
+    TokenID tokenId = 2; // The Token with type NON_FUNGIBLE that this record is for
+    repeated NftInfo nfts = 3; // List of NFTs associated to the specified token
+}
