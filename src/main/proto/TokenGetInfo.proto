@@ -44,7 +44,7 @@ message TokenInfo {
     string name = 3; // The name of the token. It is a string of ASCII only characters
     string symbol = 4; // The symbol of the token. It is a UTF-8 capitalized alphabetical string
     uint32 decimals = 5; // The number of decimal places a token is divisible by. Always 0 for tokens of type NON_FUNGIBLE. This field can never be changed!
-    uint64 maxSupply = 6; // For tokens of type FUNGIBLE - The Maximum number of fungible tokens that can be in circulation. For tokens of type NON_FUNGIBLE - the maximum number of NFTs (serial numbers) that can be in circulation. This field can never be changed!
+    int64 maxSupply = 6; // For tokens of type FUNGIBLE - The Maximum number of fungible tokens that can be in circulation. For tokens of type NON_FUNGIBLE - the maximum number of NFTs (serial numbers) that can be in circulation. This field can never be changed!
     uint64 totalSupply = 7; // For tokens of type FUNGIBLE - the total supply of tokens that are currently in circulation. For tokens of type NON_FUNGIBLE - the number of NFTs created of this token instance
     AccountID treasury = 8; // The ID of the account which is set as Treasury
     Key adminKey = 9; // The key which can perform update/delete operations on the token. If empty, the token can be perceived as immutable (not being able to be updated/deleted)

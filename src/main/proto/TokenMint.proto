@@ -35,10 +35,10 @@ Token A has 2 decimals. In order to mint 100 tokens, one must provide amount of 
  */
 
 message AmountOrMemo {
-	oneof amountOrMemo{
-    		uint64 amount = 1; // Applicable to tokens of type FUNGIBLE. The amount to mint to the Treasury Account. Amount must be a positive non-zero number represented in the lowest denomination of the token. The new supply must be lower than 2^63
-        string memo = 2; // Applicable to tokens of type NON_FUNGIBLE. The metadata for the given NFT instance that is being created
-    	}
+  oneof amountOrMemo {
+        int64 amount = 1; // Applicable to tokens of type FUNGIBLE. The amount to mint to the Treasury Account. Amount must be a positive non-zero number represented in the lowest denomination of the token. The new supply must be lower than 2^63
+        string memo = 2; // Applicable to tokens of type NON_FUNGIBLE. The metadata for the given NFT instance that is being created. Maximum allowed size is 100 bytes
+      }
 }
 
 message TokenMintTransactionBody {

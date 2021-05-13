@@ -74,34 +74,21 @@ message TransactionID {
     bool scheduled = 3; // Whether the Transaction is of type Scheduled or no
 }
 
-message AmountOrSerialNumbers {
-    oneof amountOrSerialNumbers {
-        uint64 amount = 1; // Applicable to tokens of type FUNGIBLE. Amount of fungible tokens to burn/wipe
-        SerialNumbers serialNumbers = 2; // Applicable to tokens of type NON_FUNGIBLE. The list of serial numbers to be burned/wiped.
-    }
-}
-
-//Fungible or Non-Fungible Token Base. Cannot be updated using admin key
-enum TokenType {
-    FUNGIBLE = 0;
-    NON_FUNGIBLE = 1;
-}
-
-message SerialNumbers {
-    repeated uint64 serialNumbers = 1;
-}
-
-
-message NftTransfer {
-    AccountID fromAccount = 1;  // Sending account
-    AccountID toAccount = 2;  // Receiving account
-    uint64 serialNo = 3;  // Serial number that is being transferred
-}
-
 /* An account, and the amount that it sends or receives during a cryptocurrency or token transfer. */
 message AccountAmount {
     AccountID accountID = 1; // The Account ID that sends/receives cryptocurrency or tokens
     sint64 amount = 2; // The amount of tinybars (for Crypto transfers) or in the lowest denomination (for Token transfers) that the account sends(negative) or receives(positive)
+}
+
+message SerialNumbers {
+    repeated int64 serialNumbers = 1; //Applicable to tokens of type NON_FUNGIBLE. The list of serial numbers to be burned/wiped.
+}
+
+message AmountOrSerialNumbers {
+    oneof amountOrSerialNumbers {
+        int64 amount = 1; //Applicable to tokens of type FUNGIBLE. Amount of fungible tokens to burn/wipe
+        SerialNumbers serialNumbers = 2; //Wrapper for serial numbers array
+    }
 }
 
 /* A list of accounts and amounts to transfer out of each account (negative) or into it (positive). */
@@ -109,11 +96,27 @@ message TransferList {
     repeated AccountAmount accountAmounts = 1; // Multiple list of AccountAmount pairs, each of which has an account and an amount to transfer into it (positive) or out of it (negative)
 }
 
+message AccountAmounts {
+    repeated AccountAmount transfers = 1; // Multiple list of AccountAmounts, each of which has an account and amount
+}
+
+message NftTransfer {
+    AccountID senderAccountID = 1;  // Sending account
+    AccountID receiverAccountID = 2;  // Receiving account
+    int64 serialNumber = 3;  // Serial number that is being transferred
+}
+
+message NftTransfers {
+    repeated NftTransfer nftTransfers = 1; // Applicable to tokens of type NON_FUNGIBLE
+}
+
 /* A list of token IDs and amounts representing the transferred out (negative) or into (positive) amounts, represented in the lowest denomination of the token */
 message TokenTransferList {
     TokenID token = 1; // The ID of the token
-    repeated AccountAmount transfers = 2; // Applicable to tokens of type FUNGIBLE. Multiple list of AccountAmounts, each of which has an account and amount
-    repeated NftTransfer nftTransfers = 3; // Applicable to tokens of type NON_FUNGIBLE
+    oneof nftOrAccountAmount {
+        AccountAmounts transfers = 2;
+        NftTransfers nftTransfers = 3;
+    }
 }
 
 /* Unique identifier for a topic (used by the consensus service) */
@@ -402,10 +405,15 @@ message NodeAddressBook {
     repeated NodeAddress nodeAddress = 1; // Metadata of all nodes in the network
 }
 
+/* Hedera follows semantic versioning (https://semver.org/) for both the HAPI protobufs and the Services software.
+This type allows the <tt>getVersionInfo</tt> query in the <tt>NetworkService</tt> to return the deployed versions
+of both protobufs and software on the node answering the query. */
 message SemanticVersion {
-   int32 major = 1; // Increases with incompatible API changes
-   int32 minor = 2; // Increases with backwards-compatible new functionality
-   int32 patch = 3; // Increases with backwards-compatible bug fixes
+    int32 major = 1; // Increases with incompatible API changes
+    int32 minor = 2; // Increases with backwards-compatible new functionality
+    int32 patch = 3; // Increases with backwards-compatible bug fixes
+    string pre = 4; // A pre-release version MAY be denoted by appending a hyphen and a series of dot separated identifiers (https://semver.org/#spec-item-9); so given a semver 0.14.0-alpha.1+21AF26D3, this field would contain 'alpha.1'
+    string build = 5; // Build metadata MAY be denoted by appending a plus sign and a series of dot separated identifiers immediately following the patch or pre-release version (https://semver.org/#spec-item-10); so given a semver 0.14.0-alpha.1+21AF26D3, this field would contain '21AF26D3'
 }
 
 message Setting {
@@ -416,6 +424,13 @@ message Setting {
 
 message ServicesConfigurationList {
     repeated Setting nameValue = 1; // list of name value pairs of the application properties
+}
+
+
+//Fungible or Non-Fungible Token Base. Cannot be updated using admin key
+enum TokenType {
+    FUNGIBLE = 0;
+    NON_FUNGIBLE = 1;
 }
 
 /* Token's information related to the given Account */
@@ -435,8 +450,8 @@ The transferable unit of a token is its smallest denomination, as given by the t
 Transferable units are not directly comparable across different tokens. */
 message TokenBalance {
     TokenID tokenId = 1; // A unique token id
-    uint64 balance = 2; // A number of transferable units of the identified token
-    uint32 decimals = 3; // Tokens divide into <tt>10<sup>decimals</sup></tt> pieces
+    uint64 balance = 2; // Number of transferable units of the identified token. For token of type FUNGIBLE - balance in the smallest denomination. For token of type NON_FUNGBILE - the number of NFTs held by the account
+    uint32 decimals = 3; // Tokens divide into <tt>10<sup>decimals</sup></tt> pieces. Always 0 for tokens of type NON_FUNGIBLE
 }
 
 /* A sequence of token balances */

@@ -111,5 +111,5 @@ message TransactionReceipt {
     TransactionID scheduledTransactionID = 13;
 
     // In the receipt of a TokenMintTransactionBody, the serial number of the newly created NFT
-    uint64 serialNumber = 14;
+    int64 serialNumber = 14;
 }
