@@ -315,8 +315,8 @@ message TransactionFeeSchedule {
 }
 
 enum SubType {
-    FUNGIBLE_TOKEN = 0;
-    NON_FUNGIBLE_TOKEN = 1;
+    FungibleToken = 0;
+    NonFungibleToken = 1;
 }
 
 /*
