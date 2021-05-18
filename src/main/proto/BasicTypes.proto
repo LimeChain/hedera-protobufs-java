@@ -113,9 +113,10 @@ message NftTransfers {
 /* A list of token IDs and amounts representing the transferred out (negative) or into (positive) amounts, represented in the lowest denomination of the token */
 message TokenTransferList {
     TokenID token = 1; // The ID of the token
+    repeated AccountAmount transfers = 2 [deprecated=true]; // Multiple list of AccountAmounts, each of which has an account and amount
     oneof nftOrAccountAmount {
-        AccountAmounts transfers = 2;
-        NftTransfers nftTransfers = 3;
+        AccountAmounts accountAmountTransfers = 3; // A list of AccountAmounts, each of which has an account and amount
+        NftTransfers nftTransfers = 4; // A list of NftTransfers, each of which has a sender account, receiver account and serial number
     }
 }
 
@@ -138,6 +139,12 @@ message ScheduleID {
     int64 shardNum = 1; // A nonnegative shard number
     int64 realmNum = 2; // A nonnegative realm number
     int64 scheduleNum = 3; // A nonnegative schedule number
+}
+
+//Fungible or Non-Fungible Token Base. Cannot be updated using admin key
+enum TokenType {
+    FUNGIBLE = 0;
+    NON_FUNGIBLE = 1;
 }
 
 /* Possible Freeze statuses returned on TokenGetInfoQuery or CryptoGetInfoResponse in TokenRelationship */
@@ -424,13 +431,6 @@ message Setting {
 
 message ServicesConfigurationList {
     repeated Setting nameValue = 1; // list of name value pairs of the application properties
-}
-
-
-//Fungible or Non-Fungible Token Base. Cannot be updated using admin key
-enum TokenType {
-    FUNGIBLE = 0;
-    NON_FUNGIBLE = 1;
 }
 
 /* Token's information related to the given Account */

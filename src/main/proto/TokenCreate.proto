@@ -54,10 +54,10 @@ message TokenCreateTransactionBody {
     Key wipeKey = 9; // The key which can wipe the token balance of an account. If empty, wipe is not possible
     Key supplyKey = 10; // The key which can change the supply of a token. The key is used to sign Token Mint/Burn operations
     bool freezeDefault = 11; // The default Freeze status (frozen or unfrozen) of Hedera accounts relative to this token. If true, an account must be unfrozen before it can receive the token
-    Timestamp expiry = 12; // The epoch second at which the token should expire; if an auto-renew account and period are specified, this is coerced to the current epoch second plus the autoRenewPeriod
-    AccountID autoRenewAccount = 13; // An account which will be automatically charged to renew the token's expiration, at autoRenewPeriod interval
-    Duration autoRenewPeriod = 14; // The interval at which the auto-renew account will be charged to extend the token's expiry
-    string memo = 15; // The memo associated with the token (UTF-8 encoding max 100 bytes)
-    TokenType tokenType = 16; // IWA compatibility. Specifies fungible or not
-    int64 maxSupply = 17; // IWA Compatibility. For tokens of type FUNGIBLE - the maximum number of tokens that can be in circulation. For tokens of type NON_FUNGIBLE - the maximum number of NFTs (serial numbers) that can be minted. This field can never be changed!
+    Timestamp expiry = 13; // The epoch second at which the token should expire; if an auto-renew account and period are specified, this is coerced to the current epoch second plus the autoRenewPeriod
+    AccountID autoRenewAccount = 14; // An account which will be automatically charged to renew the token's expiration, at autoRenewPeriod interval
+    Duration autoRenewPeriod = 15; // The interval at which the auto-renew account will be charged to extend the token's expiry
+    string memo = 16; // The memo associated with the token (UTF-8 encoding max 100 bytes)
+    TokenType tokenType = 17; // IWA compatibility. Specifies fungible or not
+    int64 maxSupply = 18; // IWA Compatibility. For tokens of type FUNGIBLE - the maximum number of tokens that can be in circulation. For tokens of type NON_FUNGIBLE - the maximum number of NFTs (serial numbers) that can be minted. This field can never be changed!
 }
