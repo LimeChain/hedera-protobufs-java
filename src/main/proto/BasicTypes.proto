@@ -357,7 +357,7 @@ message TransactionFeeSchedule {
     HederaFunctionality hederaFunctionality = 1;
     // Resource price coefficients
     FeeData feeData = 2 [deprecated=true];
-    // Resource price coefficients
+    // Resource price coefficients. Supports subtype price definition.
     repeated FeeData feeDataList = 3;
 }
 
