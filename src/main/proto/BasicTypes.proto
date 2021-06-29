@@ -99,6 +99,12 @@ message TokenTransferList {
     repeated NftTransfer nftTransfers = 3; // Applicable to tokens of type NON_FUNGIBLE_UNIQUE. Multiple list of NftTransfers, each of which has a sender and receiver account, including the serial number of the NFT
 }
 
+/* Representing the percentage of tokens to be transferred as part of the CustomFee */
+message Fraction {
+    uint64 numerator = 1; // numerator of the fraction
+    uint64 denominator = 2; // denominator of the fraction
+}
+
 /* Unique identifier for a topic (used by the consensus service) */
 message TopicID {
     int64 shardNum = 1; // The shard number (nonnegative)
