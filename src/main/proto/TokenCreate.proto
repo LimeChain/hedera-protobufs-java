@@ -47,11 +47,11 @@ A token can have either <i>INFINITE</i> or <i>FINITE</i> supply type, based on i
 
 If a <i>FUNGIBLE</i> TokenType is used, <i>initialSupply</i> should explicitly be set to a non-negative. If not, the transaction will resolve to INVALID_TOKEN_INITIAL_SUPPLY.
 
-If an <i>NON_FUNGIBLE_UNIQUE</i> TokenType is used, <i>initialSupply</i> should explicitly be set to 0. If not, the transaction will resolve to INVALID_TOKEN_INITIAL_SUPPLY.
+If a <i>NON_FUNGIBLE_UNIQUE</i> TokenType is used, <i>initialSupply</i> should explicitly be set to 0. If not, the transaction will resolve to INVALID_TOKEN_INITIAL_SUPPLY.
 
 If an <i>INFINITE</i> TokenSupplyType is used, <i>maxSupply</i> should explicitly be set to 0. If it is not 0, the transaction will resolve to INVALID_TOKEN_MAX_SUPPLY.
 
-If a <i>FINITE</i> TokenSupplyType is used, <i>maxSupply</i> should be explicitly set to a positive value. If it is not, the transaction will resolve to INVALID_TOKEN_MAX_SUPPLY.
+If a <i>FINITE</i> TokenSupplyType is used, <i>maxSupply</i> should be explicitly set to a non-negative value. If it is not, the transaction will resolve to INVALID_TOKEN_MAX_SUPPLY.
  */
 message TokenCreateTransactionBody {
     string name = 1; // The publicly visible name of the token, limited to a UTF-8 encoding of length <tt>tokens.maxSymbolUtf8Bytes</tt>.
